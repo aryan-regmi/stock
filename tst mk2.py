@@ -41,43 +41,43 @@ eps_growth = p_e/peg    # EPS Growth Rate [percentage]
 
 book_to_earn = p_e/price_to_book    # Book value/ Earnings
 
-# # Make Plots
-# plt.subplot(211)
-# plt.tight_layout()
-# plt.plot(close_prc)     # Closing Price Plot
-# plt.xlabel('Date')
-# plt.ylabel('Price [$]')
-# plt.title('Historical Close Prices')
-#
-# plt.subplot(223)
-# plt.tight_layout()
-# plt.plot(hist.index, diff_close)    # Close Price Change Plot
-# plt.axhline(avg_growth_rate, color='r')
-# plt.xlabel('Date')
-# plt.ylabel('Price Change [$]')
-# plt.title('Change in Closing Price')
-#
-# plt.subplot(224)
-# plt.tight_layout()
-# plt.plot(aapl.dividends)    # Dividends Plot
-# plt.xlabel('Date')
-# plt.ylabel('Dividend Yield [Percentage]')
-# plt.title('Dividend Yield')
-#
-# plt.show()
-#
-# # Print Out Results
-# print('-------------------------------------------------------------------')
-# print(f'Net Income: ${net_income}')
-# print(f'Trailing EPS (Earning Per Share): ${trail_eps:0.3f}')
-# print(f'Price-To-Book Ratio: {price_to_book:0.3f}')
-# print(f'Market Price: ${reg_prc}')
-# print(f'PE Ratio: {p_e:0.3f}')
-# print(f'PE-To-Growth Ratio: {peg:0.3f}')
-# print(f'EPS Growth Rate: {p_e/peg:0.3f}%')
-# print(f'Average Close Price Growth (Monthy): ${avg_growth_rate*30:0.3f}')
-# print(f'Book Value/Earnings Ratio: {p_e/price_to_book:0.3f}')
-# print('-------------------------------------------------------------------')
+# Make Plots
+plt.subplot(211)
+plt.tight_layout()
+plt.plot(close_prc)     # Closing Price Plot
+plt.xlabel('Date')
+plt.ylabel('Price [$]')
+plt.title('Historical Close Prices')
+
+plt.subplot(223)
+plt.tight_layout()
+plt.plot(hist.index, diff_close)    # Close Price Change Plot
+plt.axhline(avg_growth_rate, color='r')
+plt.xlabel('Date')
+plt.ylabel('Price Change [$]')
+plt.title('Change in Closing Price')
+
+plt.subplot(224)
+plt.tight_layout()
+plt.plot(aapl.dividends)    # Dividends Plot
+plt.xlabel('Date')
+plt.ylabel('Dividend Yield [Percentage]')
+plt.title('Dividend Yield')
+
+plt.show()
+
+# Print Out Results
+print('-------------------------------------------------------------------')
+print(f'Net Income: ${net_income}')
+print(f'Trailing EPS (Earning Per Share): ${trail_eps:0.3f}')
+print(f'Price-To-Book Ratio: {price_to_book:0.3f}')
+print(f'Market Price: ${reg_prc}')
+print(f'PE Ratio: {p_e:0.3f}')
+print(f'PE-To-Growth Ratio: {peg:0.3f}')
+print(f'EPS Growth Rate: {p_e/peg:0.3f}%')
+print(f'Average Close Price Growth (Monthy): ${avg_growth_rate*30:0.3f}')
+print(f'Book Value/Earnings Ratio: {p_e/price_to_book:0.3f}')
+print('-------------------------------------------------------------------')
 
 
 # TODO: Best-Fit Line for Closing Price
@@ -87,3 +87,13 @@ time = np.linspace(0, len(close_prc), len(close_prc))
 a = np.polyfit(time, close_prc, 2)
 
 print(a)
+
+
+def func_y(t,a):
+    return a[0]*(t**2) + a[1]*t + a[2]
+
+
+plt.figure()
+plt.plot(hist.index, func_y(time,a))
+plt.show()
+
