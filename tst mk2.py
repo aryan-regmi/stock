@@ -2,7 +2,7 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 import numpy as np
 from statistics import mean
-
+import datetime
 
 # Get Ticker Data
 aapl = yf.Ticker('AAPL')
@@ -41,13 +41,25 @@ eps_growth = p_e/peg    # EPS Growth Rate [percentage]
 
 book_to_earn = p_e/price_to_book    # Book value/ Earnings
 
+# Best Fit Line
+time = np.linspace(0, len(close_prc), len(close_prc))
+
+poly_coeff = np.polyfit(time, close_prc, 2)
+
+
+def best_fit_quad(t, a):
+    return a[0]*(t**2) + a[1]*t + a[2]
+
+
 # Make Plots
 plt.subplot(211)
 plt.tight_layout()
 plt.plot(close_prc)     # Closing Price Plot
+plt.plot(hist.index, best_fit_quad(time, poly_coeff))
 plt.xlabel('Date')
 plt.ylabel('Price [$]')
 plt.title('Historical Close Prices')
+plt.legend(('Close Price', 'Best-Fit Line'))
 
 plt.subplot(223)
 plt.tight_layout()
@@ -82,18 +94,5 @@ print('-------------------------------------------------------------------')
 
 # TODO: Best-Fit Line for Closing Price
 
-time = np.linspace(0, len(close_prc), len(close_prc))
 
-a = np.polyfit(time, close_prc, 2)
-
-print(a)
-
-
-def func_y(t,a):
-    return a[0]*(t**2) + a[1]*t + a[2]
-
-
-plt.figure()
-plt.plot(hist.index, func_y(time,a))
-plt.show()
 
