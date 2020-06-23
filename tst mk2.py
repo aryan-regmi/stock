@@ -2,6 +2,7 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 import numpy as np
 from statistics import mean
+import pandas as pd
 import datetime
 
 # Get Ticker Data
@@ -51,15 +52,21 @@ def best_fit_quad(t, a):
     return a[0]*(t**2) + a[1]*t + a[2]
 
 
+# TODO: Make this more dynamic (i.e able to check any future date and plot it)
+next_pos = best_fit_quad(max(time) + 30, poly_coeff)
+next_date = datetime.datetime(2020, 7, 22)
+
+
 # Make Plots
 plt.subplot(211)
 plt.tight_layout()
 plt.plot(close_prc)     # Closing Price Plot
 plt.plot(hist.index, best_fit_quad(time, poly_coeff))
+plt.plot(next_date, next_pos,'ro')
 plt.xlabel('Date')
 plt.ylabel('Price [$]')
 plt.title('Historical Close Prices')
-plt.legend(('Close Price', 'Best-Fit Line'))
+plt.legend(('Close Price', 'Best-Fit Line', 'Predicted Value'))
 
 plt.subplot(223)
 plt.tight_layout()
@@ -89,10 +96,6 @@ print(f'PE-To-Growth Ratio: {peg:0.3f}')
 print(f'EPS Growth Rate: {p_e/peg:0.3f}%')
 print(f'Average Close Price Growth (Monthy): ${avg_growth_rate*30:0.3f}')
 print(f'Book Value/Earnings Ratio: {p_e/price_to_book:0.3f}')
+print(f'Estimated Value For Specified Time: ${next_pos:0.3f}')
 print('-------------------------------------------------------------------')
-
-
-# TODO: Best-Fit Line for Closing Price
-
-
 
