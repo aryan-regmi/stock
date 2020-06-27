@@ -7,13 +7,16 @@ import datetime
 import pickle
 import os.path
 
+# ------------------------------------------------------------------------------------------------------------------- #
+# -----------------------------------------------Initialize Variables------------------------------------------------ #
 symbol = 'AAPL'
 
 fid = symbol + '.p'
 
 time_period = '5y'
 
-# Save Stock Data
+# ------------------------------------------------------------------------------------------------------------------- #
+# --------------------------------------------------Save Stock Data-------------------------------------------------- #
 if not os.path.isfile(fid):
     try:
         # Open File
@@ -52,8 +55,8 @@ if not os.path.isfile(fid):
     except:
         print('An error occurred while saving the data.')
 
-
-# Load Data from Pickle File
+# ------------------------------------------------------------------------------------------------------------------- #
+# --------------------------------------------Load Data from Pickle File--------------------------------------------- #
 f = open(fid, 'rb')
 
 # Get Historical Data
@@ -72,44 +75,33 @@ book_to_earn = pickle.load(f)
 # Close File
 f.close()
 
+# ------------------------------------------------------------------------------------------------------------------- #
+# -----------------------------------------------------Data Analysis------------------------------------------------- #
 
-# # Get Ticker Data
-# aapl = yf.Ticker('AAPL')
-#
-# # Get Historical Data
-# time_period = '5y'
-# hist = aapl.history(period=time_period)
-#
-# # Get Close Data
-# close_prc = hist['Close']
-# time_len = len(close_prc)
-#
-# # Close Price Change Data
-# diff_close = np.zeros((1, time_len))
-# diff_close = diff_close[0]
-#
-# for i in range(0, time_len - 1):
-#     diff_close[i] = close_prc[i + 1] - close_prc[i]
-#
-# avg_growth_rate = mean(diff_close)
-#
-# # Get Other Financial Data
-# net_income = aapl.info['netIncomeToCommon']
-#
-# trail_eps = aapl.info['trailingEps']
-#
-# price_to_book = aapl.info['priceToBook']
-#
-# reg_prc = aapl.info['regularMarketPrice']
-#
-# p_e = reg_prc/trail_eps
-#
-# peg = aapl.info['pegRatio']     # Price-to-Earnings/ EPS Growth Rate
-#
-# eps_growth = p_e/peg    # EPS Growth Rate [percentage]
-#
-# book_to_earn = p_e/price_to_book    # Book value/ Earnings
-#
+# Get Close Data
+close_prc = hist['Close']
+time_len = len(close_prc)
+
+# Change in Close Price
+diff_close = np.diff(close_prc, n=1, axis=0)  # [$]
+avg_close_growth = mean(diff_close)  # Average Close Price Growth [$]
+
+# Close Price Best Fit
+time = np.linspace(0, time_len, time_len)
+poly_coeff = np.polyfit(time_len, close_prc, 2)  # Quadratic Fit
+
+
+def best_fit_quad(t, coeff):
+    """
+    Returns Quadratic Best-Fit Curve given Polyfit coefficients
+    :param t: Time vector
+    :param coeff: Polyfit Coefficients
+    :return: Best-Fit Line
+    """
+    return coeff[0]*(t**2) + coeff[1]*t + coeff[2]
+
+
+
 # # Best Fit Line
 # time = np.linspace(0, len(close_prc), len(close_prc))
 #
