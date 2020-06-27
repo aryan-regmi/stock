@@ -7,7 +7,6 @@ import datetime
 import pickle
 import os.path
 
-
 symbol = 'AAPL'
 
 fid = symbol + '.p'
@@ -16,27 +15,62 @@ time_period = '5y'
 
 # Save Stock Data
 if not os.path.isfile(fid):
-    # Open File
-    f = open(fid, 'wb')
+    try:
+        # Open File
+        f = open(fid, 'wb')
 
-    # Get Ticker data
-    stock_data = yf.Ticker(symbol)
+        # Get Ticker data
+        stock_data = yf.Ticker(symbol)
 
-    # Get Historical Data
-    hist = stock_data.history(period=time_period)
+        # Get Historical Data
+        hist = stock_data.history(period=time_period)
 
-    # Get Other Financial Data
-    net_income = stock_data.info['netIncomeToCommon']
-    trail_eps = stock_data.info['trailingEps']
-    price_to_book = stock_data.info['priceToBook']
-    reg_prc = stock_data.info['regularMarketPrice']
-    p_e = reg_prc/trail_eps
-    peg = stock_data.info['pegRatio']     # Price-to-Earnings/ EPS Growth Rate
-    eps_growth = p_e/peg    # EPS Growth Rate [percentage]
-    book_to_earn = p_e/price_to_book    # Book value/ Earnings
+        # Get Other Financial Data
+        net_income = stock_data.info['netIncomeToCommon']
+        trail_eps = stock_data.info['trailingEps']
+        price_to_book = stock_data.info['priceToBook']
+        reg_prc = stock_data.info['regularMarketPrice']
+        p_e = reg_prc / trail_eps
+        peg = stock_data.info['pegRatio']  # Price-to-Earnings/ EPS Growth Rate
+        eps_growth = p_e / peg  # EPS Growth Rate [percentage]
+        book_to_earn = p_e / price_to_book  # Book value/ Earnings
+
+        # Pickle Data and Save
+        pickle.dump(hist, f)
+        pickle.dump(net_income, f)
+        pickle.dump(trail_eps, f)
+        pickle.dump(price_to_book, f)
+        pickle.dump(reg_prc, f)
+        pickle.dump(p_e, f)
+        pickle.dump(peg, f)
+        pickle.dump(eps_growth, f)
+        pickle.dump(book_to_earn, f)
+
+        # Close File
+        f.close()
+
+    except:
+        print('An error occurred while saving the data.')
 
 
+# Load Data from Pickle File
+f = open(fid, 'rb')
 
+# Get Historical Data
+hist = pickle.load(f)
+
+# Get Other Financial Data
+net_income = pickle.load(f)
+trail_eps = pickle.load(f)
+price_to_book = pickle.load(f)
+reg_prc = pickle.load(f)
+p_e = pickle.load(f)
+peg = pickle.load(f)
+eps_growth = pickle.load(f)
+book_to_earn = pickle.load(f)
+
+# Close File
+f.close()
 
 
 # # Get Ticker Data
@@ -132,4 +166,3 @@ if not os.path.isfile(fid):
 # print(f'Book Value/Earnings Ratio: {p_e/price_to_book:0.3f}')
 # print(f'Estimated Value For Specified Time: ${next_pos:0.3f}')
 # print('-------------------------------------------------------------------')
-
