@@ -4,6 +4,7 @@ import numpy as np
 from statistics import mean
 import pandas as pd
 import datetime
+from dateutil.relativedelta import relativedelta
 import pickle
 import os.path
 
@@ -78,6 +79,8 @@ f.close()
 # ------------------------------------------------------------------------------------------------------------------- #
 # -----------------------------------------------------Data Analysis------------------------------------------------- #
 
+last_date = hist.index[-1]  # Last available date
+
 # Get Close Data
 close_prc = hist['Close']
 time_len = len(close_prc)
@@ -101,17 +104,21 @@ def best_fit_quad(t, coeff):
     return coeff[0]*(t**2) + coeff[1]*t + coeff[2]
 
 
+def predict_close_prc(t, period, coeff):
+    """
+    Returns predicted close price for specified period (in days)
+    :param t: Time vector
+    :param period: Days to predict for
+    :param coeff: Polyfit Coefficients to pass to 'best_fit_quad()' function
+    :return:
+        next_prc: Predicted Close Price
+        next_date: Date to Plot 'next_prc'
+    """
+    next_prc = best_fit_quad(max(t) + period, coeff=coeff)
+    next_date = last_date + relativedelta(days=period)
+    return next_prc, next_date
 
-# # Best Fit Line
-# time = np.linspace(0, len(close_prc), len(close_prc))
-#
-# poly_coeff = np.polyfit(time, close_prc, 2)
-#
-#
-# def best_fit_quad(t, a):
-#     return a[0]*(t**2) + a[1]*t + a[2]
-#
-#
+
 # # TODO: Make this more dynamic (i.e able to check any future date and plot it)
 # next_pos = best_fit_quad(max(time) + 30, poly_coeff)
 # next_date = datetime.datetime(2020, 7, 22)
