@@ -19,6 +19,7 @@ time_period = '5y'
 # ------------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------------------Save Stock Data-------------------------------------------------- #
 if not os.path.isfile(fid):
+    print("Gathering Stock Data...")
     try:
         # Open File
         f = open(fid, 'wb')
@@ -78,7 +79,6 @@ f.close()
 
 # ------------------------------------------------------------------------------------------------------------------- #
 # -----------------------------------------------------Data Analysis------------------------------------------------- #
-
 last_date = hist.index[-1]  # Last available date
 
 # Get Close Data
@@ -95,7 +95,7 @@ poly_coeff = np.polyfit(time, close_prc, 2)  # Quadratic Fit
 poly = np.poly1d(poly_coeff)
 
 
-def predict_close_prc(t, desc_poly, period=30):
+def predict_close_prc(t=time, desc_poly=poly, period=30):
     """
     Returns predicted close price for specified period (in days)
     :param desc_poly: Polynomial Describing the Close Price
@@ -110,18 +110,22 @@ def predict_close_prc(t, desc_poly, period=30):
     return next_prc, next_date
 
 
+# ------------------------------------------------------------------------------------------------------------------- #
+# ---------------------------------------------------------Plots----------------------------------------------------- #
+plt.subplot(211)
+plt.tight_layout()
+plt.plot(close_prc)     # Closing Price Plot
+# plt.plot(hist.index, poly(time))  # Best Fit Line
+plt.plot(predict_close_prc(period=365)[1], predict_close_prc(period=365)[0], 'ro')
+plt.xlabel('Date')
+plt.ylabel('Price [$]')
+plt.title('Historical Close Prices')
+plt.legend(('Close Price', f'Predicted Value = ${predict_close_prc(period=365)[0]: 0.2f}'))
+plt.show()
 
-#
-# # Make Plots
-# plt.subplot(211)
-# plt.tight_layout()
-# plt.plot(close_prc)     # Closing Price Plot
-# plt.plot(hist.index, best_fit_quad(time, poly_coeff))
-# plt.plot(next_date, next_pos,'ro')
-# plt.xlabel('Date')
-# plt.ylabel('Price [$]')
-# plt.title('Historical Close Prices')
-# plt.legend(('Close Price', 'Best-Fit Line', 'Predicted Value'))
+# TODO: Show date the value was predicted for on graph/ print it out
+
+
 #
 # plt.subplot(223)
 # plt.tight_layout()
