@@ -91,38 +91,26 @@ avg_close_growth = mean(diff_close)  # Average Close Price Growth [$]
 
 # Close Price Best Fit
 time = np.linspace(0, time_len, time_len)
-poly_coeff = np.polyfit(time_len, close_prc, 2)  # Quadratic Fit
+poly_coeff = np.polyfit(time, close_prc, 2)  # Quadratic Fit
+poly = np.poly1d(poly_coeff)
 
 
-def best_fit_quad(t, coeff):
-    """
-    Returns Quadratic Best-Fit Curve given Polyfit coefficients
-    :param t: Time vector
-    :param coeff: Polyfit Coefficients
-    :return: Best-Fit Line
-    """
-    return coeff[0]*(t**2) + coeff[1]*t + coeff[2]
-
-
-def predict_close_prc(t, period, coeff):
+def predict_close_prc(t, desc_poly, period=30):
     """
     Returns predicted close price for specified period (in days)
+    :param desc_poly: Polynomial Describing the Close Price
     :param t: Time vector
-    :param period: Days to predict for
-    :param coeff: Polyfit Coefficients to pass to 'best_fit_quad()' function
+    :param period: Days to predict for [Default to 30 days]
     :return:
         next_prc: Predicted Close Price
         next_date: Date to Plot 'next_prc'
     """
-    next_prc = best_fit_quad(max(t) + period, coeff=coeff)
+    next_prc = desc_poly(max(t) + period)
     next_date = last_date + relativedelta(days=period)
     return next_prc, next_date
 
 
-# # TODO: Make this more dynamic (i.e able to check any future date and plot it)
-# next_pos = best_fit_quad(max(time) + 30, poly_coeff)
-# next_date = datetime.datetime(2020, 7, 22)
-#
+
 #
 # # Make Plots
 # plt.subplot(211)
