@@ -91,7 +91,7 @@ avg_close_growth = mean(diff_close)  # Average Close Price Growth [$]
 
 # Close Price Best Fit
 time = np.linspace(0, time_len, time_len)
-poly_coeff = np.polyfit(time, close_prc, 2)  # Quadratic Fit
+poly_coeff = np.polyfit(time, close_prc, 5)  # Quadratic Fit
 poly = np.poly1d(poly_coeff)
 
 
@@ -115,16 +115,30 @@ def predict_close_prc(t=time, desc_poly=poly, period=30):
 plt.subplot(211)
 plt.tight_layout()
 plt.plot(close_prc)     # Closing Price Plot
-# plt.plot(hist.index, poly(time))  # Best Fit Line
-plt.plot(predict_close_prc(period=365)[1], predict_close_prc(period=365)[0], 'ro')
+plt.plot(hist.index, poly(time))  # Best Fit Line
+# plt.plot(predict_close_prc(period=365)[1], predict_close_prc(period=365)[0], 'ro')
 plt.xlabel('Date')
 plt.ylabel('Price [$]')
 plt.title('Historical Close Prices')
-plt.legend(('Close Price', f'Predicted Value = ${predict_close_prc(period=365)[0]: 0.2f}'))
-plt.show()
+# plt.legend(('Close Price', f'Predicted Value = ${predict_close_prc(period=365)[0]: 0.2f}'))
+# plt.show()
 
 # TODO: Show date the value was predicted for on graph/ print it out
 
+
+# Errors in Best-Fit Line
+close_err = (close_prc - poly(time))/close_prc
+
+plt.subplot(212)
+plt.tight_layout()
+plt.plot(close_err)     # Closing Price Plot
+# plt.plot(hist.index, poly(time))  # Best Fit Line
+plt.xlabel('Date')
+plt.ylabel('Price [$]')
+plt.title('Error Between Best-Fit and Actual Close Price')
+plt.show()
+
+print(max(close_err), min(close_err))
 
 #
 # plt.subplot(223)
