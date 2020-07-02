@@ -207,7 +207,13 @@ class Stocks:
         plt.title('Predicted Close Price Data')
         plt.show()
 
+    # TODO: Find avg error/ cumulative sum of error
+    # TODO: Show avg monthly price growth in 'Change in Closing Price' plot
+    # TODO: Find fair value price from EPS growth and P/E Ratio
+    # TODO: Use regression to minimize errors between best-fit (w/ varying degrees) and actual prices
+
 
 st = Stocks('AAPL', '5y')
 
+st.plot_data()
 st.plot_predicted_prc(365)
