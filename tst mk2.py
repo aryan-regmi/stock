@@ -112,7 +112,7 @@ def predict_close_prc(t=time, desc_poly=poly, period=30):
 
 # ------------------------------------------------------------------------------------------------------------------- #
 # ---------------------------------------------------------Plots----------------------------------------------------- #
-plt.subplot(211)
+plt.subplot(221)
 plt.tight_layout()
 plt.plot(close_prc)     # Closing Price Plot
 plt.plot(hist.index, poly(time))  # Best Fit Line
@@ -129,7 +129,7 @@ plt.title('Historical Close Prices')
 # Errors in Best-Fit Line
 close_err = (close_prc - poly(time))/close_prc
 
-plt.subplot(212)
+plt.subplot(222)
 plt.tight_layout()
 plt.plot(close_err)     # Closing Price Plot
 # plt.plot(hist.index, poly(time))  # Best Fit Line
