@@ -141,8 +141,8 @@ class Stocks:
         close_prc, diff_close, avg_close_growth = self.close_data_analysis()
 
         # Get Polynomial for Best-Fit
-        poly = self.close_prc_best_fit(close_prc, 5)    # 5th degree polynomial
-        # TODO: Find the fit dynamically and update '5'
+        poly = self.close_prc_best_fit(close_prc, 2)    # 2nd degree polynomial
+        # TODO: Find the fit dynamically and update '2'
 
         plt.figure()
 
@@ -192,7 +192,7 @@ class Stocks:
         close_prc, _, _ = self.close_data_analysis()
 
         # Get Polynomial for Best-Fit
-        poly = self.close_prc_best_fit(close_prc)    # 5th degree polynomial
+        poly = self.close_prc_best_fit(close_prc, 2)    # 2nd degree polynomial
 
         next_date, next_prc = self.predict_close_prc(poly, period)
 
@@ -211,9 +211,11 @@ class Stocks:
     # TODO: Show avg monthly price growth in 'Change in Closing Price' plot
     # TODO: Find fair value price from EPS growth and P/E Ratio
     # TODO: Use regression to minimize errors between best-fit (w/ varying degrees) and actual prices
+    # TODO: Get stock symbol from user
 
 
 st = Stocks('AAPL', '5y')
-
 st.plot_data()
-st.plot_predicted_prc(365)
+st.plot_predicted_prc(365*5)
+
+
