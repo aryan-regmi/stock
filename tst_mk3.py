@@ -7,9 +7,7 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 from datetime import datetime
 
-# import plotly.io as pio
-# print(pio.renderers)
-# pio.renderers.default = 'png'
+import plotly.offline as poff
 
 
 # TODO: Replace PolyVec implementation with numpy array
@@ -113,7 +111,7 @@ class Stock:
             max_err = max(err)
             result_vec.err_vec[i - 1] = max_err
 
-        print(f"SUM: {result_vec.err_vec.cumsum(axis=0)}")
+        # print(f"SUM: {result_vec.err_vec.cumsum(axis=0)}")
         abs_err_vec = abs(result_vec.err_vec)
         min_error: float = min(abs_err_vec)
         min_idx = (abs_err_vec <= min_error).nonzero()
@@ -200,6 +198,7 @@ class Stock:
 
         # Change Background Color
         fig.update_layout(plot_bgcolor='rgba(75, 0, 0, 0.20)', hovermode='x unified')
+        fig.write_html('predicted_price.html')
         fig.show()
 
     def plot_predicted_price(self, period=30):
@@ -250,7 +249,8 @@ class Stock:
                           title_text=plot_titles,
                           title_x=0.5,
                           title_font_size=30)
-        # fig.show()
+        fig.write_html('predicted_price.html')
+        fig.show()
 
 
 v1 = Stock('AAPL')
